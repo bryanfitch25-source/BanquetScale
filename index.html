@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BanquetScale — Prep Sheets and Recipe Scaling for Banquet Kitchens</title>
+<meta name="description" content="Scale recipes to any guest count and generate station-by-station prep sheets in seconds. One-time purchase, runs in your browser, no subscription." />
+<meta name="color-scheme" content="light only">
+<meta name="theme-color" content="#F1EFE1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Libre+Franklin:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: light;
+    --bg:#F1EFE1; --paper:#FBFAF4; --paperAlt:#F1ECD9; --ink:#2B2A20;
+    --accent:#4C7A52; --accentDeep:#365939; --accentSoft:#DCE7D6;
+    --gold:#BD8A3F; --goldDeep:#8C6428; --line:#E4DFC9; --lineStrong:#C7C0A1;
+    --muted:#6B6852; --mutedDark:#4A4736;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'Libre Franklin',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{font-family:'Fraunces',serif;}
+  .label{font-family:'Libre Franklin',sans-serif; letter-spacing:.08em; text-transform:uppercase; font-size:.78rem; font-weight:700; color:var(--mutedDark);}
+  .wrap{max-width:1040px; margin:0 auto; padding:0 24px;}
+  a{color:inherit;}
+
+  /* Header */
+  header{padding:28px 0; border-bottom:1px solid var(--line);}
+  .header-inner{display:flex; align-items:center; justify-content:space-between;}
+  .brand{display:flex; align-items:center; gap:10px; font-family:'Fraunces',serif; font-size:1.3rem; font-weight:600;}
+  .brand svg{flex-shrink:0;}
+  .brand span{color:var(--accent);}
+  nav a{margin-left:28px; font-size:.9rem; font-weight:500; text-decoration:none; color:var(--mutedDark);}
+  nav a:hover{color:var(--ink);}
+  .btn{
+    display:inline-block; padding:11px 20px; border-radius:8px; font-weight:600; font-size:.88rem;
+    text-decoration:none; border:1px solid transparent; cursor:pointer;
+  }
+  .btn-primary{background:var(--accent); color:#fff;}
+  .btn-primary:hover{background:var(--accentDeep);}
+  .btn-ghost{border-color:var(--lineStrong); color:var(--ink);}
+  .btn-ghost:hover{background:var(--paperAlt);}
+
+  /* Hero */
+  .hero{padding:88px 0 70px; position:relative;}
+  .ornament{color:var(--gold); font-size:1.4rem; display:block; margin-bottom:18px;}
+  .hero h1{font-size:3.1rem; line-height:1.08; font-weight:600; margin:0 0 22px; max-width:760px;}
+  .hero h1 em{font-style:italic; color:var(--accent); font-weight:500;}
+  .hero p.lede{font-size:1.15rem; color:var(--mutedDark); max-width:560px; line-height:1.6; margin:0 0 34px;}
+  .hero-actions{display:flex; gap:14px; align-items:center; flex-wrap:wrap;}
+  .hero-note{font-size:.82rem; color:var(--muted); margin-top:14px;}
+
+  /* Scaling demo card - the signature element */
+  .demo{
+    margin-top:64px; background:var(--paper); border:1px solid var(--line); border-radius:14px;
+    padding:32px; max-width:640px; box-shadow:0 18px 40px -20px rgba(43,42,32,.18);
+  }
+  .demo-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px;}
+  .demo-title{font-family:'Fraunces',serif; font-size:1.25rem; font-weight:600;}
+  .demo-toggle{display:flex; border:1px solid var(--lineStrong); border-radius:8px; overflow:hidden; font-size:.8rem;}
+  .demo-toggle button{
+    border:none; background:transparent; padding:6px 14px; font-family:inherit; font-weight:600;
+    color:var(--mutedDark); cursor:pointer;
+  }
+  .demo-toggle button.active{background:var(--accent); color:#fff;}
+  .demo-sub{font-size:.85rem; color:var(--muted); margin-bottom:22px;}
+  .ingredient-row{
+    display:flex; align-items:center; justify-content:space-between; padding:11px 0;
+    border-bottom:1px solid var(--line); font-size:.95rem;
+  }
+  .ingredient-row:last-child{border-bottom:none;}
+  .ingredient-name{color:var(--ink);}
+  .ingredient-amt{font-variant-numeric:tabular-nums; font-weight:600; color:var(--accentDeep); transition:opacity .15s;}
+  .station-tag{
+    display:inline-block; font-size:.68rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--mutedDark); background:var(--paperAlt); border-radius:5px; padding:2px 7px; margin-left:8px;
+  }
+
+  /* Sections */
+  section{padding:64px 0;}
+  .section-label{margin-bottom:14px;}
+  .section-head h2{font-size:2rem; font-weight:600; margin:0 0 12px; max-width:600px;}
+  .section-head p{color:var(--mutedDark); max-width:520px; line-height:1.6; font-size:1.02rem;}
+
+  .features{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:14px; overflow:hidden; margin-top:40px;}
+  .feature{background:var(--paper); padding:30px 26px;}
+  .feature .num{font-family:'Fraunces',serif; font-size:.85rem; color:var(--goldDeep); font-weight:700; margin-bottom:14px; display:block;}
+  .feature h3{font-size:1.1rem; margin:0 0 10px; font-weight:600; color:var(--ink);}
+  .feature p{font-size:.95rem; color:var(--mutedDark); line-height:1.6; margin:0;}
+
+  /* Pricing */
+  .pricing-grid{display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:44px;}
+  .price-card{background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:32px;}
+  .price-card.featured{border-color:var(--accent); box-shadow:0 18px 40px -22px rgba(76,122,82,.35);}
+  .price-eyebrow{font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; font-weight:700; color:var(--accentDeep); margin-bottom:10px;}
+  .price-amt{font-family:'Fraunces',serif; font-size:2.6rem; font-weight:600; margin:0 0 4px; color:var(--ink);}
+  .price-amt sup{font-size:1rem; font-weight:500; color:var(--mutedDark);}
+  .price-desc{color:var(--mutedDark); font-size:.95rem; margin:0 0 22px;}
+  .price-list{list-style:none; margin:0 0 26px; padding:0; font-size:.95rem; color:var(--ink);}
+  .price-list li{padding:8px 0; border-top:1px solid var(--line); display:flex; gap:10px;}
+  .price-list li:first-child{border-top:none;}
+  .price-list li::before{content:"✓"; color:var(--accent); font-weight:700;}
+  .price-card .btn{width:100%; text-align:center;}
+
+  /* FAQ */
+  .faq-item{border-top:1px solid var(--line); padding:22px 0;}
+  .faq-item:last-child{border-bottom:1px solid var(--line);}
+  .faq-item h3{font-size:1.05rem; font-weight:600; margin:0 0 8px; color:var(--ink);}
+  .faq-item p{font-size:.97rem; color:var(--mutedDark); line-height:1.6; margin:0; max-width:640px;}
+
+  footer{border-top:1px solid var(--line); padding:36px 0; margin-top:20px;}
+  .footer-inner{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;}
+  .footer-inner .label{font-size:.78rem;}
+
+  @media (max-width:760px){
+    .hero h1{font-size:2.2rem;}
+    .features{grid-template-columns:1fr;}
+    .pricing-grid{grid-template-columns:1fr;}
+    nav{display:none;}
+  }
+  @media (prefers-reduced-motion:reduce){ *{transition:none !important;} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap header-inner">
+    <div class="brand">
+      <svg width="26" height="26" viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="#F1EFE1"/><circle cx="16" cy="16" r="13.5" stroke="#4C7A52" stroke-width="1.6" fill="none"/><path d="M16 8.5v15M9.5 12h13M12 24.5h8" stroke="#4C7A52" stroke-width="1.6" stroke-linecap="round"/><path d="M7.3 12l-2.8 5.4a3.2 3.2 0 0 0 6.3 0z" stroke="#4C7A52" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M24.7 12l-2.8 5.4a3.2 3.2 0 0 0 6.3 0z" stroke="#4C7A52" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Banquet<span>Scale</span>
+    </div>
+    <nav>
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a href="#pricing" class="btn btn-primary">Buy once, own it</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="ornament">❁</span>
+    <h1>Guest counts change<br>an hour before service.<br><em>Your prep sheets shouldn't take an hour to fix.</em></h1>
+    <p class="lede">BanquetScale scales any recipe to any headcount instantly, then sorts every ingredient into a station-by-station prep sheet your kitchen can actually cook from.</p>
+    <div class="hero-actions">
+      <a href="#pricing" class="btn btn-primary">See pricing</a>
+      <a href="#demo" class="btn btn-ghost">How it works</a>
+    </div>
+    <p class="hero-note">One-time purchase. Runs in your browser — no install, no monthly fee, no internet required.</p>
+
+    <div class="demo" id="demo">
+      <div class="demo-head">
+        <div class="demo-title">Osso Buco-Style Braised Short Rib</div>
+        <div class="demo-toggle">
+          <button id="btn18" class="active" onclick="setGuests(18)">18 guests</button>
+          <button id="btn64" onclick="setGuests(64)">64 guests</button>
+        </div>
+      </div>
+      <div class="demo-sub">Ingredients rescale automatically. Steps and lead time stay attached to the recipe.</div>
+      <div id="rows"></div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <div class="label section-label">What it does</div>
+    <div class="section-head">
+      <h2>Built around how a banquet kitchen actually works</h2>
+      <p>Not a recipe blog, not a generic converter — a tool shaped by prep lists, hotel pans, and station sheets.</p>
+    </div>
+    <div class="features">
+      <div class="feature"><span class="num">01</span><h3>Instant recipe scaling</h3><p>Enter a guest count and every ingredient recalculates, with smart rounding to the units you actually buy in — dozens, cases, gallons.</p></div>
+      <div class="feature"><span class="num">02</span><h3>Station-sorted prep sheets</h3><p>Generate a printable sheet grouped by Protein, Produce, Dairy, Pantry, and more — handed straight to the line, not reformatted first.</p></div>
+      <div class="feature"><span class="num">03</span><h3>Event & menu groups</h3><p>Build a full banquet menu once, save it as a group, and reuse it across every event at that guest count or a different one.</p></div>
+      <div class="feature"><span class="num">04</span><h3>Allergen & dietary tags</h3><p>Flag gluten, shellfish, dairy, and more per recipe so substitutions and special requests don't get missed on a busy night.</p></div>
+      <div class="feature"><span class="num">05</span><h3>Optional team sync</h3><p>Connect your own free Firebase project to share recipes and events live across every device in the kitchen — or skip it and stay fully offline.</p></div>
+      <div class="feature"><span class="num">06</span><h3>Your data, your device</h3><p>No account required to use it. Nothing leaves your browser unless you choose to turn sync on.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="wrap">
+    <div class="label section-label">Pricing</div>
+    <div class="section-head">
+      <h2>Pay once. No subscription, ever.</h2>
+      <p>Both tiers are the same file. The difference is how many kitchens you're licensed to run it in.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-eyebrow">Single Kitchen</div>
+        <p class="price-amt">$69</p>
+        <p class="price-desc">For one property, run by one team.</p>
+        <ul class="price-list">
+          <li>Licensed for one kitchen / location</li>
+          <li>Unlimited recipes, groups, and events</li>
+          <li>Unlimited team members synced to that kitchen</li>
+          <li>Free updates to future versions</li>
+        </ul>
+        <a href="#" class="btn btn-ghost">Buy Single Kitchen</a>
+      </div>
+      <div class="price-card featured">
+        <div class="price-eyebrow">Multi-Location</div>
+        <p class="price-amt">$249</p>
+        <p class="price-desc">For catering companies running more than one property.</p>
+        <ul class="price-list">
+          <li>Licensed for unlimited locations, one company</li>
+          <li>Everything in Single Kitchen</li>
+          <li>Set up a separate synced team per location</li>
+          <li>Free updates to future versions</li>
+        </ul>
+        <a href="#" class="btn btn-primary">Buy Multi-Location</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="label section-label">Questions</div>
+    <div class="section-head"><h2>Before you buy</h2></div>
+    <div style="margin-top:24px;">
+      <div class="faq-item"><h3>Is this a subscription?</h3><p>No. You pay once and keep the file. There's no recurring charge and no license check that can lock you out.</p></div>
+      <div class="faq-item"><h3>Do I need to install anything?</h3><p>No. BanquetScale is a single file that opens in any modern browser, on desktop or tablet.</p></div>
+      <div class="faq-item"><h3>What if I need it on more than one device?</h3><p>The file works standalone on any device. If you want live syncing between devices — say, the office computer and a tablet on the line — connect your own free Firebase project in a few minutes; setup steps are built into the app.</p></div>
+      <div class="faq-item"><h3>Where does my data live?</h3><p>In your browser by default. If you turn on sync, it lives in the Firebase project you control — never on our servers.</p></div>
+      <div class="faq-item"><h3>What's the difference between the two tiers?</h3><p>The file and features are identical. Single Kitchen covers one property; Multi-Location covers a catering company running the tool across several.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-inner">
+    <div class="label">BanquetScale — Prep Sheet Generator</div>
+    <div class="label">Questions before buying? Email hello@banquetscale.example</div>
+  </div>
+</footer>
+
+<script>
+  const RECIPE = {
+    18: [
+      { name: "beef short rib, bone-in", amt: "18 lb", station: "Protein" },
+      { name: "yellow onion, diced", amt: "2 lb", station: "Produce" },
+      { name: "dry red wine", amt: "3 cup", station: "Pantry" },
+      { name: "beef stock", amt: "0.75 gal", station: "Pantry" },
+    ],
+    64: [
+      { name: "beef short rib, bone-in", amt: "64 lb", station: "Protein" },
+      { name: "yellow onion, diced", amt: "7.1 lb", station: "Produce" },
+      { name: "dry red wine", amt: "10.7 cup", station: "Pantry" },
+      { name: "beef stock", amt: "2.7 gal", station: "Pantry" },
+    ]
+  };
+  function setGuests(n){
+    document.getElementById('btn18').classList.toggle('active', n===18);
+    document.getElementById('btn64').classList.toggle('active', n===64);
+    const rows = document.getElementById('rows');
+    rows.innerHTML = RECIPE[n].map(r => `
+      <div class="ingredient-row">
+        <span class="ingredient-name">${r.name}<span class="station-tag">${r.station}</span></span>
+        <span class="ingredient-amt">${r.amt}</span>
+      </div>`).join('');
+  }
+  setGuests(18);
+</script>
+
+</body>
+</html>
