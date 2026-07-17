@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>BanquetScale — Prep Sheets and Recipe Scaling for Banquet Kitchens</title>
-<meta name="description" content="Scale recipes to any guest count and generate station-by-station prep sheets in seconds. One-time purchase, runs in your browser, no subscription." />
+<meta name="description" content="Recipe scaling and prep sheets for banquet kitchens — the part every all-in-one catering platform still leaves to a spreadsheet. One-time purchase, no subscription." />
 <meta name="color-scheme" content="light only">
 <meta name="theme-color" content="#F1EFE1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -61,12 +61,12 @@
     margin-top:64px; background:var(--paper); border:1px solid var(--line); border-radius:14px;
     padding:32px; max-width:640px; box-shadow:0 18px 40px -20px rgba(43,42,32,.18);
   }
-  .demo-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px;}
-  .demo-title{font-family:'Fraunces',serif; font-size:1.25rem; font-weight:600;}
-  .demo-toggle{display:flex; border:1px solid var(--lineStrong); border-radius:8px; overflow:hidden; font-size:.8rem;}
+  .demo-head{display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:6px; flex-wrap:wrap;}
+  .demo-title{font-family:'Fraunces',serif; font-size:1.25rem; font-weight:600; flex:1 1 auto; min-width:180px;}
+  .demo-toggle{display:flex; border:1.5px solid var(--lineStrong); border-radius:9px; overflow:hidden; font-size:.85rem; flex-shrink:0; background:var(--paperAlt);}
   .demo-toggle button{
-    border:none; background:transparent; padding:6px 14px; font-family:inherit; font-weight:600;
-    color:var(--mutedDark); cursor:pointer;
+    border:none; background:transparent; padding:9px 16px; font-family:inherit; font-weight:700;
+    color:var(--mutedDark); cursor:pointer; white-space:nowrap;
   }
   .demo-toggle button.active{background:var(--accent); color:#fff;}
   .demo-sub{font-size:.85rem; color:var(--muted); margin-bottom:22px;}
@@ -123,6 +123,10 @@
     .features{grid-template-columns:1fr;}
     .pricing-grid{grid-template-columns:1fr;}
     nav{display:none;}
+    .demo{padding:24px 20px;}
+    .demo-head{flex-direction:column; align-items:stretch;}
+    .demo-toggle{width:100%;}
+    .demo-toggle button{flex:1 1 50%; text-align:center; padding:12px 8px;}
   }
   @media (prefers-reduced-motion:reduce){ *{transition:none !important;} }
 </style>
@@ -148,13 +152,14 @@
 <section class="hero">
   <div class="wrap">
     <span class="ornament">❁</span>
+    <div class="label" style="margin-bottom:16px;">For banquet & catering kitchens</div>
     <h1>Guest counts change<br>an hour before service.<br><em>Your prep sheets shouldn't take an hour to fix.</em></h1>
-    <p class="lede">BanquetScale scales any recipe to any headcount instantly, then sorts every ingredient into a station-by-station prep sheet your kitchen can actually cook from.</p>
+    <p class="lede">BanquetScale rescales every recipe to the day's actual headcount and rebuilds your station prep sheets in seconds — the one part of the job every all-in-one catering platform still leaves to a spreadsheet.</p>
     <div class="hero-actions">
       <a href="#pricing" class="btn btn-primary">See pricing</a>
       <a href="#demo" class="btn btn-ghost">How it works</a>
     </div>
-    <p class="hero-note">One-time purchase. Runs in your browser — no install, no monthly fee, no internet required.</p>
+    <p class="hero-note">One-time purchase, no setup fee. Runs in your browser — no install, no monthly bill, no internet required.</p>
 
     <div class="demo" id="demo">
       <div class="demo-head">
@@ -164,7 +169,7 @@
           <button id="btn64" onclick="setGuests(64)">64 guests</button>
         </div>
       </div>
-      <div class="demo-sub">Ingredients rescale automatically. Steps and lead time stay attached to the recipe.</div>
+      <div class="demo-sub">Change the headcount, watch every ingredient rescale. Steps and lead time stay attached to the recipe.</div>
       <div id="rows"></div>
     </div>
   </div>
@@ -174,16 +179,16 @@
   <div class="wrap">
     <div class="label section-label">What it does</div>
     <div class="section-head">
-      <h2>Built around how a banquet kitchen actually works</h2>
-      <p>Not a recipe blog, not a generic converter — a tool shaped by prep lists, hotel pans, and station sheets.</p>
+      <h2>Not a CRM. Not a BEO generator. Just the recipe math, done right.</h2>
+      <p>Most catering software manages bookings, staffing, and invoicing — and still hands you a spreadsheet when it's time to actually scale a recipe. BanquetScale is built for that one job.</p>
     </div>
     <div class="features">
-      <div class="feature"><span class="num">01</span><h3>Instant recipe scaling</h3><p>Enter a guest count and every ingredient recalculates, with smart rounding to the units you actually buy in — dozens, cases, gallons.</p></div>
-      <div class="feature"><span class="num">02</span><h3>Station-sorted prep sheets</h3><p>Generate a printable sheet grouped by Protein, Produce, Dairy, Pantry, and more — handed straight to the line, not reformatted first.</p></div>
-      <div class="feature"><span class="num">03</span><h3>Event & menu groups</h3><p>Build a full banquet menu once, save it as a group, and reuse it across every event at that guest count or a different one.</p></div>
+      <div class="feature"><span class="num">01</span><h3>Instant recipe scaling</h3><p>Change the guest count and every ingredient recalculates on the spot, rounded to how you actually buy — dozens, cases, gallons — not raw decimals nobody can use on the line.</p></div>
+      <div class="feature"><span class="num">02</span><h3>Station-sorted prep sheets</h3><p>Print a sheet grouped by Protein, Produce, Dairy, and Pantry, ready to hand straight to the line — no reformatting, no retyping it into a template.</p></div>
+      <div class="feature"><span class="num">03</span><h3>Built for last-minute changes</h3><p>Headcount jumps from 80 to 110 the morning of service? Update one number and every prep sheet updates with it — not a re-do of the math by hand.</p></div>
       <div class="feature"><span class="num">04</span><h3>Allergen & dietary tags</h3><p>Flag gluten, shellfish, dairy, and more per recipe so substitutions and special requests don't get missed on a busy night.</p></div>
       <div class="feature"><span class="num">05</span><h3>Optional team sync</h3><p>Connect your own free Firebase project to share recipes and events live across every device in the kitchen — or skip it and stay fully offline.</p></div>
-      <div class="feature"><span class="num">06</span><h3>Your data, your device</h3><p>No account required to use it. Nothing leaves your browser unless you choose to turn sync on.</p></div>
+      <div class="feature"><span class="num">06</span><h3>Your data, your device</h3><p>No account required to use it, and nothing sits on someone else's server by default — unlike most catering platforms, which store your kitchen's data in their cloud whether you like it or not.</p></div>
     </div>
   </div>
 </section>
@@ -193,7 +198,7 @@
     <div class="label section-label">Pricing</div>
     <div class="section-head">
       <h2>Pay once. No subscription, ever.</h2>
-      <p>Both tiers are the same file. The difference is how many kitchens you're licensed to run it in.</p>
+      <p>Most catering platforms charge a setup fee before you've scaled a single recipe, then bill monthly on top. BanquetScale doesn't — buy it once, keep it.</p>
     </div>
     <div class="pricing-grid">
       <div class="price-card">
@@ -229,8 +234,10 @@
     <div class="label section-label">Questions</div>
     <div class="section-head"><h2>Before you buy</h2></div>
     <div style="margin-top:24px;">
+      <div class="faq-item"><h3>Is this a full catering CRM?</h3><p>No — BanquetScale does one job: turning your recipes into accurate, scaled prep sheets for the guest count you actually have. If you need booking, invoicing, or staff scheduling too, run it alongside whatever CRM you already use.</p></div>
       <div class="faq-item"><h3>Is this a subscription?</h3><p>No. You pay once and keep the file. There's no recurring charge and no license check that can lock you out.</p></div>
       <div class="faq-item"><h3>Do I need to install anything?</h3><p>No. BanquetScale is a single file that opens in any modern browser, on desktop or tablet.</p></div>
+      <div class="faq-item"><h3>Can I reuse a menu across different events?</h3><p>Yes. Build a full banquet menu once, save it as a group, and reuse it for the next event — at that guest count or a completely different one.</p></div>
       <div class="faq-item"><h3>What if I need it on more than one device?</h3><p>The file works standalone on any device. If you want live syncing between devices — say, the office computer and a tablet on the line — connect your own free Firebase project in a few minutes; setup steps are built into the app.</p></div>
       <div class="faq-item"><h3>Where does my data live?</h3><p>In your browser by default. If you turn on sync, it lives in the Firebase project you control — never on our servers.</p></div>
       <div class="faq-item"><h3>What's the difference between the two tiers?</h3><p>The file and features are identical. Single Kitchen covers one property; Multi-Location covers a catering company running the tool across several.</p></div>
@@ -241,7 +248,7 @@
 <footer>
   <div class="wrap footer-inner">
     <div class="label">BanquetScale — Prep Sheet Generator</div>
-    <div class="label">Questions before buying? Email hello@banquetscale.example</div>
+    <div class="label">Questions before buying? Email BanquetScaler@gmail.com</div>
   </div>
 </footer>
 
