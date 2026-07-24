@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>How BanquetScale Works: Scale a Real Recipe Right Now</title>
+<meta name="description" content="Try the actual scaling math behind BanquetScale. Enter a guest count and watch a full recipe rescale live, with unit auto-upgrading and cost per guest." />
+<meta name="color-scheme" content="light only">
+<meta name="theme-color" content="#F1EFE1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Libre+Franklin:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <div class="wrap header-inner">
+    <a href="index.html" class="brand">
+      <svg width="26" height="26" viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="#F4EDE4"/><circle cx="16" cy="16" r="13.5" stroke="#C1603C" stroke-width="1.6" fill="none"/><path d="M16 8.5v15M9.5 12h13M12 24.5h8" stroke="#C1603C" stroke-width="1.6" stroke-linecap="round"/><path d="M7.3 12l-2.8 5.4a3.2 3.2 0 0 0 6.3 0z" stroke="#C1603C" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M24.7 12l-2.8 5.4a3.2 3.2 0 0 0 6.3 0z" stroke="#C1603C" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Banquet<span>Scale</span>
+    </a>
+    <nav>
+      <a href="how-it-works.html">How It Works</a>
+      <a href="product.html">Product</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="faq.html">FAQ</a>
+    </nav>
+    <details class="mobile-nav">
+      <summary aria-label="Menu">☰</summary>
+      <div class="mobile-nav-links">
+        <a href="how-it-works.html">How It Works</a>
+        <a href="product.html">Product</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="faq.html">FAQ</a>
+      </div>
+    </details>
+    <a href="pricing.html" class="btn btn-primary">Buy once, own it</a>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="wrap">
+    <div class="label section-label">How it works</div>
+    <div class="section-head">
+      <h2>Scale a real recipe, right now.</h2>
+      <p>This is the actual math running inside the app, not a mockup. Change the guest count below and watch every ingredient rescale, with the same unit rounding, station grouping, and cost tracking the product itself uses.</p>
+    </div>
+
+    <div class="scale-widget">
+      <div class="scale-widget-head">
+        <div>
+          <div class="scale-widget-title">Braised Short Rib for a Crowd</div>
+          <div class="scale-widget-sub">Base recipe: 20 guests, 1x per guest</div>
+        </div>
+        <div class="guest-control">
+          <div class="guest-input-row">
+            <label for="guestInput">Guest count</label>
+            <input type="number" id="guestInput" min="1" max="1000" value="20" oninput="onGuestInput(this.value)">
+            <button type="button" class="guest-chip" id="unitToggle" onclick="toggleUnitSystem()" title="Toggle imperial or metric units">⚖ Imperial</button>
+          </div>
+          <div class="guest-chips" id="guestChips"></div>
+        </div>
+      </div>
+
+      <div class="cost-banner" id="costBanner"></div>
+
+      <div id="ingredientList"></div>
+    </div>
+
+    <div class="how-steps">
+      <div class="how-step">
+        <span class="stepnum">1</span>
+        <h3>Enter your guest count</h3>
+        <p>Type a number or tap a preset, same as the Scale tab in the real app. No spreadsheet formulas to maintain or break.</p>
+      </div>
+      <div class="how-step">
+        <span class="stepnum">2</span>
+        <h3>Every ingredient rescales instantly</h3>
+        <p>Amounts round up to the unit you'd actually buy in, tablespoons become cups, cups become quarts, so nobody's reading a raw decimal on the line. Switch the Imperial/Metric toggle above and every amount converts to kilograms and litres, same as in the app.</p>
+      </div>
+      <div class="how-step">
+        <span class="stepnum">3</span>
+        <h3>Print it, station by station</h3>
+        <p>In the real app this same list sorts into a printable, station-grouped prep sheet, and tracks food cost per guest automatically as you scale.</p>
+      </div>
+    </div>
+
+    <div class="nav-cards">
+      <a class="nav-card" href="product.html">
+        <h3>See the full product tour</h3>
+        <p>Every tab explained in detail, plus real screenshots of the current app.</p>
+        <span class="arrow">Explore the product →</span>
+      </a>
+      <a class="nav-card" href="pricing.html">
+        <h3>Ready to buy?</h3>
+        <p>One-time purchase, Single Kitchen or Multi-Location.</p>
+        <span class="arrow">See pricing →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-inner">
+    <div class="label">BanquetScale: Prep Sheet Generator</div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="product.html">Product</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="faq.html">FAQ</a>
+      <a href="terms.html">License Agreement</a>
+      <a href="mailto:BanquetScaler@gmail.com">BanquetScaler@gmail.com</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const BASE_GUESTS = 20;
+  const PRESETS = [20, 50, 100, 150, 250];
+  let UNIT_SYSTEM = 'imperial';
+
+  // Unit ladders: each tier's factor = how many base sub-units make one of this unit.
+  // Base sub-unit for volume is tsp (imperial) / ml (metric), for weight is oz (imperial) / g (metric),
+  // for count it's "each". This mirrors the real app's UNIT_LADDER + convertToSystem logic exactly.
+  const LADDERS = {
+    volume: [
+      { u: 'tsp', f: 1 },
+      { u: 'tbsp', f: 3 },
+      { u: 'cup', f: 48 },
+      { u: 'qt', f: 192 },
+      { u: 'gal', f: 768 },
+    ],
+    volumeMetric: [
+      { u: 'ml', f: 1 },
+      { u: 'L', f: 1000 },
+    ],
+    weight: [
+      { u: 'oz', f: 1 },
+      { u: 'lb', f: 16 },
+    ],
+    weightMetric: [
+      { u: 'g', f: 1 },
+      { u: 'kg', f: 1000 },
+    ],
+    count: [
+      { u: 'each', f: 1 },
+      { u: 'dozen', f: 12 },
+    ],
+  };
+  const ML_PER_TSP = 4.92892, G_PER_OZ = 28.3495;
+
+  function convertForSystem(scaledAmount, ladderName, originalUnit, system) {
+    if (ladderName === 'count' || system === 'imperial') {
+      return { amount: scaledAmount, ladder: ladderName, unit: originalUnit };
+    }
+    if (ladderName === 'volume') {
+      const tsp = scaledAmount * unitFactor('volume', originalUnit);
+      return { amount: tsp * ML_PER_TSP, ladder: 'volumeMetric', unit: 'ml' };
+    }
+    const oz = scaledAmount * unitFactor('weight', originalUnit);
+    return { amount: oz * G_PER_OZ, ladder: 'weightMetric', unit: 'g' };
+  }
+
+  const RECIPE = [
+    { name: 'beef short rib, bone-in', amount: 20, unit: 'lb', ladder: 'weight', station: 'Protein', costPerUnit: 9.50 },
+    { name: 'yellow onion, diced', amount: 2, unit: 'lb', ladder: 'weight', station: 'Produce', costPerUnit: 0.55 },
+    { name: 'carrots, diced', amount: 1.5, unit: 'lb', ladder: 'weight', station: 'Produce', costPerUnit: 0.65 },
+    { name: 'celery, diced', amount: 1, unit: 'lb', ladder: 'weight', station: 'Produce', costPerUnit: 0.60 },
+    { name: 'fresh thyme, chopped', amount: 2, unit: 'tbsp', ladder: 'volume', station: 'Produce', costPerUnit: 0.40 },
+    { name: 'garlic, minced', amount: 2, unit: 'tbsp', ladder: 'volume', station: 'Pantry', costPerUnit: 0.30 },
+    { name: 'tomato paste', amount: 3, unit: 'tbsp', ladder: 'volume', station: 'Pantry', costPerUnit: 0.25 },
+    { name: 'dry red wine', amount: 3, unit: 'cup', ladder: 'volume', station: 'Pantry', costPerUnit: 1.10 },
+    { name: 'beef stock', amount: 2, unit: 'cup', ladder: 'volume', station: 'Pantry', costPerUnit: 0.35 },
+    { name: 'dinner rolls', amount: 24, unit: 'each', ladder: 'count', station: 'Bakery', costPerUnit: 0.45 },
+  ];
+
+  function unitFactor(ladderName, unit) {
+    return LADDERS[ladderName].find(t => t.u === unit).f;
+  }
+
+  function upgradeUnit(baseSubUnitAmount, ladderName, originalUnit) {
+    const ladder = LADDERS[ladderName];
+    const originalIdx = ladder.findIndex(t => t.u === originalUnit);
+    for (let i = ladder.length - 1; i >= originalIdx; i--) {
+      const val = baseSubUnitAmount / ladder[i].f;
+      if (val >= 1) return { amount: val, unit: ladder[i].u };
+    }
+    return { amount: baseSubUnitAmount / ladder[originalIdx].f, unit: originalUnit };
+  }
+
+  function roundNice(v) {
+    let r;
+    if (v >= 100) r = Math.round(v);
+    else if (v >= 10) r = Math.round(v * 10) / 10;
+    else r = Math.round(v * 100) / 100;
+    return parseFloat(r.toFixed(2));
+  }
+
+  function scaleIngredient(item, guests) {
+    const multiplier = guests / BASE_GUESTS;
+    const scaledInOriginalUnit = item.amount * multiplier;
+    const converted = convertForSystem(scaledInOriginalUnit, item.ladder, item.unit, UNIT_SYSTEM);
+    const baseSubUnitAmount = converted.amount * unitFactor(converted.ladder, converted.unit);
+    const display = upgradeUnit(baseSubUnitAmount, converted.ladder, converted.unit);
+    // Cost always uses the original entered unit and quantity, never the display conversion,
+    // same separation the real app's recipeCost()/scaleIngredient() keep.
+    const cost = scaledInOriginalUnit * item.costPerUnit;
+    return { amount: roundNice(display.amount), unit: display.unit, cost };
+  }
+
+  function toggleUnitSystem() {
+    UNIT_SYSTEM = UNIT_SYSTEM === 'imperial' ? 'metric' : 'imperial';
+    document.getElementById('unitToggle').textContent = UNIT_SYSTEM === 'metric' ? '⚖ Metric' : '⚖ Imperial';
+    render(Number(document.getElementById('guestInput').value) || BASE_GUESTS);
+  }
+
+  function render(guests) {
+    document.querySelectorAll('.guest-chip').forEach(btn => {
+      btn.classList.toggle('active', Number(btn.dataset.guests) === guests);
+    });
+
+    const stations = {};
+    let totalCost = 0;
+    RECIPE.forEach(item => {
+      const scaled = scaleIngredient(item, guests);
+      totalCost += scaled.cost;
+      (stations[item.station] = stations[item.station] || []).push({ name: item.name, amount: scaled.amount, unit: scaled.unit });
+    });
+
+    const perGuest = totalCost / guests;
+    document.getElementById('costBanner').innerHTML =
+      `Estimated cost: $${totalCost.toFixed(2)} total &middot; $${perGuest.toFixed(2)} / guest
+       <span>Cost per guest holds steady no matter the headcount, since it's computed from the same per-unit cost before any display rounding.</span>`;
+
+    const list = document.getElementById('ingredientList');
+    list.innerHTML = Object.keys(stations).map(station => `
+      <div class="station-group">
+        <span class="station-name">${station}</span>
+        ${stations[station].map(ing => `
+          <div class="ingredient-row">
+            <span class="ingredient-name">${ing.name}</span>
+            <span class="ingredient-amt">${ing.amount} ${ing.unit}</span>
+          </div>`).join('')}
+      </div>`).join('');
+  }
+
+  function onGuestInput(value) {
+    let n = parseInt(value, 10);
+    if (!n || n < 1) n = 1;
+    if (n > 1000) n = 1000;
+    render(n);
+  }
+
+  function setGuestsFromChip(n) {
+    document.getElementById('guestInput').value = n;
+    render(n);
+  }
+
+  document.getElementById('guestChips').innerHTML = PRESETS.map(n =>
+    `<button type="button" class="guest-chip" data-guests="${n}" onclick="setGuestsFromChip(${n})">${n}</button>`
+  ).join('');
+
+  render(BASE_GUESTS);
+</script>
+
+</body>
+</html>
